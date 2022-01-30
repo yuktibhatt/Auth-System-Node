@@ -49,6 +49,7 @@ app.post("/register", async (req,res) => {
     //update or not in db ?
 
     //handle the pw situation 
+    user.password = undefined;
 
     res.status(201).json(user);
         

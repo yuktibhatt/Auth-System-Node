@@ -6,9 +6,12 @@ const bcrypt = require('bcryptjs');
 const user = require("./model/user");
 const jwt = require('jsonwebtoken');
 const auth = require("./middleware/auth")
+const cookieParser = require('cookie-parser');
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
+
 
 app.get("/", (req,res) => {
     res.send("<h1>Hello from auth system</h1>")
@@ -80,8 +83,19 @@ app.post("/login", async (req,res) => {
             )
             user.token = token
             user.password = undefined
-            res.status(200).json(user)
+            //res.status(200).json(user)
 
+            //use of cookies
+            const options = {
+                expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                httpOnly : true,
+                
+            };
+            res.status(200).cookie('token', token, options).json({
+                success : true,
+                token,
+                user
+            });
         }
         res.status(400).send("Email or password is incorrect");
         

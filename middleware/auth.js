@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 //model is optional
 
 const auth = (req,res, next) => {
-    const token = req.header('Authorization').replace("Bearer ", '') || req.cookies.token || req.body.token;
+    console.log(req.cookies);
+    const token = req.cookies.token || req.body.token || req.header('Authorization').replace("Bearer ", '');
 
     if(!token) {
         return res.status(403).send("token is missing")
